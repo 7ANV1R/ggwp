@@ -16,11 +16,12 @@ class ActorName {
 
 String currentActor = ActorName.ninjaForg;
 
-class GGwp extends FlameGame with HasKeyboardHandlerComponents {
+class GGwp extends FlameGame with HasKeyboardHandlerComponents, DragCallbacks {
   @override
   Color backgroundColor() => const Color(0xFF211F30);
 
   late final CameraComponent cam;
+  late JoystickComponent joystick;
 
   final level = Level(
     lavelName: 'level-0',
@@ -37,6 +38,12 @@ class GGwp extends FlameGame with HasKeyboardHandlerComponents {
 
     camera.viewfinder.anchor = Anchor.topLeft;
     addAll([camera, level]);
+
+    addGameController();
     return super.onLoad();
+  }
+
+  void addGameController() {
+    joystick = JoystickComponent();
   }
 }
