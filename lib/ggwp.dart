@@ -1,9 +1,9 @@
 import 'dart:async';
-import 'dart:ui';
 
 import 'package:flame/components.dart';
 import 'package:flame/events.dart';
 import 'package:flame/game.dart';
+import 'package:flutter/material.dart';
 import 'package:ggwp/actors/player.dart';
 import 'package:ggwp/level/level.dart';
 
@@ -34,16 +34,47 @@ class GGwp extends FlameGame with HasKeyboardHandlerComponents, DragCallbacks {
     await images.loadAllImages();
 
     // camera
-    camera = CameraComponent.withFixedResolution(width: 649, height: 360, world: level);
-
-    camera.viewfinder.anchor = Anchor.topLeft;
-    addAll([camera, level]);
+    camera = CameraComponent.withFixedResolution(width: 649, height: 360, world: level)
+      ..priority = 0
+      ..viewfinder.anchor = Anchor.topLeft;
 
     addGameController();
+    addAll([camera, level]);
+
     return super.onLoad();
   }
 
   void addGameController() {
-    joystick = JoystickComponent();
+    // final screenWidth = size[0];
+    // final screenHeight = size[1];
+
+    joystick = JoystickComponent(
+      priority: 1,
+      knob: SpriteComponent(
+        sprite: Sprite(
+          images.fromCache('HUD/knob.png'),
+          srcSize: Vector2.all(32),
+        ),
+      ),
+      background: SpriteComponent(
+        sprite: Sprite(
+          images.fromCache('HUD/joystick.png'),
+          srcSize: Vector2.all(64),
+        ),
+      ),
+      margin: const EdgeInsets.only(
+        left: 32,
+        bottom: 32,
+      ),
+
+      // position: Vector2(screenWidth - 100, screenHeight),
+    );
+    // joystick = JoystickComponent(
+    //   priority: 1,
+    //   knob: CircleComponent(radius: 30, paint: BasicPalette.black.paint()),
+    //   background: CircleComponent(radius: 60, paint: BasicPalette.black.withAlpha(100).paint()),
+    //   margin: const EdgeInsets.only(bottom: 40, left: 40),
+    // );
+    add(joystick);
   }
 }
